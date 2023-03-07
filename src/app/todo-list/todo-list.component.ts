@@ -113,6 +113,20 @@ export class TodoListComponent implements OnInit {
     todo.editable = false ;
   }
 
+
+  /**
+ * 取得未完成的待辦事項清單
+ *
+ * @returns {Todo[]}
+ * @memberof TodoListComponent
+ */
+  getRemainingList(): Todo[] {
+    return this.todoListService.getWithCompleted(false);
+  }
+
+ 
+
+
 }
 
 
