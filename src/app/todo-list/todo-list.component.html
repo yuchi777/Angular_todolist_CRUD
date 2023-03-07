@@ -1,0 +1,53 @@
+<section class="todoapp">
+
+    <header class="header">
+        <h1>example</h1>
+        <input 
+        class="new-todo" 
+        placeholder="What needs to be done?" 
+        autofocus 
+        (keyup)="addTodo($event)"
+        >
+    </header>
+
+    <!-- 清單區域開始 -->
+    <section class="main" *ngIf="getList().length">
+
+        <ul class="todo-list">
+            <li 
+            *ngFor="let todo of getList(); let i = index" 
+            [class.completed]="todo.done"
+            [class.editing]="todo.editing"
+            >
+                <div class="view">
+                    <input 
+                    class="toggle" 
+                    type="checkbox" 
+                    (click)="todo.toggleCompletion()"
+                    [checked]="todo.done"
+                    >
+                    <label (dblclick)="edit(todo)">{{todo.getTitle()}}</label>
+                    <button class="destroy" (click)="remove(i)"></button>
+                </div>
+                <input
+                class="edit"
+                #editedtodo
+                *ngIf="todo.editing"
+                [value]="todo.getTitle()"
+                (blur)="update(todo, editedtodo.value)"
+                (keyup.enter)="update(todo, editedtodo.value)"
+                (keyup.escape)="cancelEditing(todo)"
+                >
+            </li>
+        </ul>
+
+    </section>
+    <!-- 清單區域結束 -->
+</section>
+
+
+<!-- 事件綁定 (keyup)="addTodo($event)"-->
+<!-- 改使用 [(ngModel)] 來處理雙向綁定 , app.module.ts 加入 FormsModule -->
+<!-- blur事件 - 離開焦點時進行事件觸發 -->
+<!-- dblclick雙擊定點設備按鈕（例如鼠標的主按鈕）時會觸發該事件 -->
+<!-- #editedtodo 屬性是 Angular 的 Template 語法，意思有點等同我們在事件綁定時使用 $event.target ，用來取得該元素的實體。 -->
