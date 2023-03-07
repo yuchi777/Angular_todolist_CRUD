@@ -6,6 +6,7 @@ import { Todo } from './todo.model';
 @Injectable({
   providedIn: 'root'
 })
+
 export class TodoListService {
 
   constructor() { }
@@ -42,10 +43,10 @@ export class TodoListService {
     @param {number} index - 待辦事項的索引位置
     @memberof TodoListService
   */
-  remove(index:number):void{
+  remove(index: number): void {
     //splice() 方法可以藉由刪除既有元素並／或加入新元素來改變一個陣列的內容。
     //從索引 index 的位置開始，刪除 1 個元素
-    this.list.splice(index,1)
+    this.list.splice(index, 1)
   }
 
 
@@ -56,8 +57,17 @@ export class TodoListService {
  * @returns {Todo[]}
  * @memberof TodoListService
  */
-  getWithCompleted(completed: boolean):Todo[]{
+  getWithCompleted(completed: boolean): Todo[] {
     return this.list.filter(todo => todo.done === completed);
+  }
+
+  /**
+ * 從清單中移除所有已完成之待辦事項
+ *
+ * @memberof TodoListService
+ */
+  removeCompleted(): void {
+    this.list = this.getWithCompleted(false);
   }
 
 }

@@ -4,6 +4,8 @@ import { TodoListService } from './todo-list.service';
 // Class
 import { Todo } from './todo.model';
 
+import { TodoStatusType } from './todo-status-type';
+
 @Component({
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
@@ -12,7 +14,7 @@ import { Todo } from './todo.model';
 export class TodoListComponent implements OnInit {
 
   constructor(private todoListService: TodoListService) { }
-  keyword = "";
+
   ngOnInit(): void {
   }
 
@@ -46,7 +48,26 @@ export class TodoListComponent implements OnInit {
    * @memberof TodoListComponent
    */
   getList(): Todo[] {
-    return this.todoListService.getList();
+    // return this.todoListService.getList();
+
+    let list: Todo[] = [];
+    switch (this.status) {
+
+      case TodoStatusType.Active:
+        list = this.getRemainingList();
+        break;
+
+      case TodoStatusType.Completed:
+        list = this.getCompletedList();
+        break;
+
+      default:
+        list = this.todoListService.getList();
+        break;
+
+    }
+
+    return list;
   }
 
 
@@ -56,7 +77,7 @@ export class TodoListComponent implements OnInit {
  * @param {number} index - 待辦事項的索引位置
  * @memberof TodoListComponent
  */
-  remove(index: number):void {
+  remove(index: number): void {
     this.todoListService.remove(index);
   }
 
@@ -79,24 +100,24 @@ export class TodoListComponent implements OnInit {
  * @param {string} newTitle - 新的事項名稱
  * @memberof TodoListComponent
  */
-  update(todo:Todo, newTitle: string):void{
+  update(todo: Todo, newTitle: string): void {
 
-    if(!todo.editable){
+    if (!todo.editable) {
       return;
     }
 
     const title = newTitle.trim();
 
     // 如果有輸入名稱則修改事項名稱
-    if(title){
+    if (title) {
       todo.setTitle(title);
       todo.editable = false;
-    }else{
+    } else {
 
       // 如果沒有名稱則刪除該項待辦事項
       //indexOf() 方法會回傳給定元素於陣列中第一個被找到之索引，若不存在於陣列中則回傳 -1。
       const index = this.getList().indexOf(todo);
-      if(index !== -1){
+      if (index !== -1) {
         this.remove(index);
       }
     }
@@ -109,8 +130,8 @@ export class TodoListComponent implements OnInit {
  * @param {Todo} todo - 欲取消編輯狀態的待辦事項
  * @memberof TodoListComponent
  */
-  cancelEditing(todo:Todo):void{
-    todo.editable = false ;
+  cancelEditing(todo: Todo): void {
+    todo.editable = false;
   }
 
 
@@ -124,7 +145,63 @@ export class TodoListComponent implements OnInit {
     return this.todoListService.getWithCompleted(false);
   }
 
- 
+
+  /**
+* 待辦事項狀態的列舉
+*
+* @memberof TodoListComponent
+*/
+  todoStatusType = TodoStatusType;
+
+  /**
+   * 目前狀態
+   *
+   * @private
+   * @memberof TodoListComponent
+   */
+  private status = TodoStatusType.All;
+
+
+  /**
+ * 取得已完成的待辦事項
+ *
+ * @returns {Todo[]}
+ * @memberof TodoListComponent
+ */
+  getCompletedList(): Todo[] {
+    return this.todoListService.getWithCompleted(true);
+  }
+
+  /**
+   * 設定狀態
+   *
+   * @param {number} status - 欲設定的狀態
+   * @memberof TodoListComponent
+   */
+  setStatus(status: number): void {
+    this.status = status;
+  }
+
+  /**
+   * 檢查目前狀態
+   *
+   * @param {number} status - 欲檢查的狀態
+   * @returns {boolean}
+   * @memberof TodoListComponent
+   */
+  checkStatus(status: number): boolean {
+    return this.status === status;
+  }
+
+
+  /**
+ * 從清單中移除所有已完成之待辦事項
+ *
+ * @memberof TodoListComponent
+ */
+  removeCompleted(): void {
+    this.todoListService.removeCompleted();
+  }
 
 
 }
