@@ -64,7 +64,7 @@ export class Todo {
     * @type {boolean}
     * @memberof Todo
     */
-    get editing():boolean{
+    get editing(): boolean {
         return this.editMode;
     }
 
@@ -73,7 +73,7 @@ export class Todo {
     *
     * @memberof Todo
     */
-    set editable(b1: boolean){
+    set editable(b1: boolean) {
         this.editMode = b1;
     }
 
@@ -83,7 +83,7 @@ export class Todo {
     * @param {string} title
     * @memberof Todo
     */
-    setTitle(title:string):void{
+    setTitle(title: string): void {
         this.title = title;
     }
 
@@ -106,6 +106,14 @@ export class Todo {
         this.completed = !this.completed;
     }
 
+    /**
+    * 設定是否完成
+    *
+    * @param {boolean} completed
+    * @memberof Todo
+    */
+    setCompleted(completed: boolean): void {
+        this.completed = completed;
+    }
 
-    
 }
